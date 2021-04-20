@@ -28,6 +28,13 @@ public class Hand {
 		kicker3 = new Card();
 		kicker4 = new Card();
 	}
+	
+	public void clearKickers() {
+		kicker1 = new Card();
+		kicker2 = new Card();
+		kicker3 = new Card();
+		kicker4 = new Card();
+	}
 
 	public void show() {
 		hands.get(0).show();
@@ -72,6 +79,8 @@ public class Hand {
 		nums = (ArrayList<Card>) hands.clone();
 
 		Collections.sort(nums);
+		
+		clearKickers();
 
 		int pt = 0;
 		/// This block below checks if there's a kind.
@@ -146,7 +155,7 @@ public class Hand {
 			tmp = HIGH + best.get(0).num;
 			if (tmp > rank) {
 				rank = tmp;
-
+				
 				if (best.size() > 5) {
 					best.remove(5);
 					if (best.size() > 5) {
@@ -388,6 +397,8 @@ public class Hand {
 				if (pt < 3 && nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
 					max = nums.get(pt).num;
 					while (true) {
+						if(pt >= SIZE)
+							break;
 						if (nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
 							rows++;
 							suits.add(nums.get(pt).suit);
@@ -397,13 +408,12 @@ public class Hand {
 							}
 						}
 
-						else if (nums.get(pt).compareTo(nums.get(pt + 1)) == 0) {
-							pt++;
+						else if (nums.get(pt).num == nums.get(pt + 1).num) {
+							pt += 2;
 							if (pt >= SIZE - 1) {
 								break;
 							}
 						}
-
 						else
 							break;
 					}
@@ -546,18 +556,6 @@ public class Hand {
 				}
 			}
 		}
-
-		System.out.println("rank : " + rank);
-
-		System.out.print("Best hand : ");
-		for (int i = 0; i < best.size(); i++) {
-			best.get(i).show();
-			System.out.print(" ");
-		}
-		System.out.println();
-
-		System.out.println(text);
-
 		return rank;
 	}
 
