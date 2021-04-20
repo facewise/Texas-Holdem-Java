@@ -1,9 +1,7 @@
 package com.holdem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class Hand {
 
@@ -48,6 +46,7 @@ public class Hand {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public int getRank() {
 		final int SIZE = hands.size();
 
@@ -145,26 +144,30 @@ public class Hand {
 				best.add(c);
 			}
 			tmp = HIGH + best.get(0).num;
-			if (best.size() > 5) {
-				best.remove(5);
+			if (tmp > rank) {
+				rank = tmp;
+
 				if (best.size() > 5) {
 					best.remove(5);
-					kicker1 = best.get(1);
-					kicker2 = best.get(2);
-					kicker3 = best.get(3);
-					kicker4 = best.get(4);
+					if (best.size() > 5) {
+						best.remove(5);
+						kicker1 = best.get(1);
+						kicker2 = best.get(2);
+						kicker3 = best.get(3);
+						kicker4 = best.get(4);
+					}
 				}
+				if (best.get(0).num < 11)
+					text = Integer.toString(best.get(0).num) + " 하이카드";
+				else if (best.get(0).num == 11)
+					text = "J 하이카드";
+				else if (best.get(0).num == 12)
+					text = "Q 하이카드";
+				else if (best.get(0).num == 13)
+					text = "K 하이카드";
+				else if (best.get(0).num == 14)
+					text = "Ace 하이카드";
 			}
-			if (best.get(0).num < 11)
-				text = Integer.toString(best.get(0).num) + " 하이카드";
-			else if (best.get(0).num == 11)
-				text = "J 하이카드";
-			else if (best.get(0).num == 12)
-				text = "Q 하이카드";
-			else if (best.get(0).num == 13)
-				text = "K 하이카드";
-			else if (best.get(0).num == 14)
-				text = "Ace 하이카드";
 
 		}
 
