@@ -17,7 +17,7 @@ public class Table {
 
 	private ArrayList<Integer> playersPot;
 
-	private int tableNum;
+	public int tableNum;
 
 	private int dButton;
 
@@ -205,7 +205,8 @@ public class Table {
 				turn();
 				if (ask()) {
 					river();
-					showdown();
+					if(ask())
+						showdown();
 				}
 				else
 					showdown();
@@ -217,8 +218,9 @@ public class Table {
 			showdown();
 		
 		System.out.print("Restart -- ");
-		if(ask())
+		if(ask()) {
 			run();
+		}
 
 	}
 }
