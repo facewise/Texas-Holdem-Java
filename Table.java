@@ -66,13 +66,16 @@ public class Table {
 		b.show();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void showdown() {
 
 		ArrayList<Player> kicking = new ArrayList<Player>();
-		ArrayList<Player> temp = (ArrayList<Player>) players.clone();
+		ArrayList<Player> temp = new ArrayList<>();
 		Player winner;
 
+		for (Player p : players) {
+			if (p.isActive)
+				temp.add(p);
+		}
 		Collections.sort(temp, Collections.reverseOrder());
 		int maxRank = temp.get(0).hand.rank;
 
@@ -172,53 +175,108 @@ public class Table {
 		}
 	}
 
-	private boolean ask() {
+	private int ask() {
 		int tmp;
-		out.print("GO / STOP >> ");
+		out.print("BET (0 : Fold) :  ");
 		tmp = sc.nextInt();
-		if (tmp == 1)
-			return true;
-		else if (tmp == 2)
-			return false;
-		else
+		if (tmp == 0)
+			return 0;
+		else if (tmp > 0) {
+			return tmp;
+		} else {
 			return ask();
+		}
 
 	}
 
-	public void run() {
+	public void debug() {
 		init();
-		Player user = new Player("USER", 10000);
+		Player user = new Player("USER", 100);
 		players.add(user);
-		players.add(new Player("CPU1", 10000));
-		players.add(new Player("CPU2", 10000));
-		players.add(new Player("CPU3", 10000));
-		players.add(new Player("CPU4", 10000));
-		players.add(new Player("CPU5", 10000));
+		players.add(new Player("CPU1", 100));
+		players.add(new Player("CPU2", 100));
+		players.add(new Player("CPU3", 100));
+		players.add(new Player("CPU4", 100));
+		players.add(new Player("CPU5", 100));
 
 		for (Player p : players) {
 			p.hand = new Hand(d.draws(2));
 		}
 		user.show();
-		if (ask()) {
-			flop();
-			if (ask()) {
-				turn();
-				if (ask()) {
-					river();
-					if(ask())
-						showdown();
-				}
-				else
-					showdown();
-			}
-			else
-				showdown();
+		flop();
+		turn();
+		river();
+		showdown();
+	}
+
+	@SuppressWarnings("unchecked")
+	public void run() {
+		init();
+		Player user = new Player("USER", 100);
+		players.add(user);
+		players.add(new Player("CPU1", 100));
+		players.add(new Player("CPU2", 100));
+		players.add(new Player("CPU3", 100));
+		players.add(new Player("CPU4", 100));
+		players.add(new Player("CPU5", 100));
+
+		for (Player p : players) {
+			p.hand = new Hand(d.draws(2));
 		}
-		else
+		user.show();
+		if (ask() > 0) {
+			flop();
+			int tmp = ask();
+			if (tmp > 0) {
+				tablePot = tmp;
+				for (int i = 0; i < players.size(); i++) {
+					if (players.get(i) != user)
+						players.get(i).setPot(tablePot);
+				}
+				ArrayList<Player> temp = (ArrayList<Player>) players.clone();
+				for (Player p : temp) {
+					if (!p.isActive) {
+						players.remove(p);
+					}
+				}
+
+				System.out.println();
+				turn();
+				tmp = ask();
+				if (tmp > 0) {
+					tablePot = tmp;
+					for (int i = 0; i < players.size(); i++) {
+						if (players.get(i) != user)
+							players.get(i).setPot(tablePot);
+					}
+					temp = (ArrayList<Player>) players.clone();
+					for (Player p : temp) {
+						if (!p.isActive) {
+							players.remove(p);
+						}
+					}
+
+					System.out.println();
+					river();
+					if (ask() > 0)
+						showdown();
+				} else {
+					user.fold();
+					showdown();
+				}
+
+			} else {
+				user.fold();
+				showdown();
+			}
+
+		} else {
+			user.fold();
 			showdown();
-		
+		}
+
 		System.out.print("Restart -- ");
-		if(ask()) {
+		if (ask() > 0) {
 			run();
 		}
 

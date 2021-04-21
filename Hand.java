@@ -183,7 +183,7 @@ class Hand {
 				}
 				temp.removeAll(best);
 				kickers.clear();
-				if(SIZE >= 5) {
+				if (temp.size() >= 3) {
 					kickers.add(temp.get(0));
 					kickers.add(temp.get(1));
 					kickers.add(temp.get(2));
@@ -217,7 +217,7 @@ class Hand {
 					}
 					temp.removeAll(best);
 					kickers.clear();
-					if(SIZE >= 5) {
+					if (temp.size() >= 1) {
 						kickers.add(temp.get(0));
 					}
 					best.addAll(kickers);
@@ -247,7 +247,7 @@ class Hand {
 					}
 					temp.removeAll(best);
 					kickers.clear();
-					if(SIZE >= 5) {
+					if (temp.size() >= 1) {
 						kickers.add(temp.get(0));
 					}
 					best.addAll(kickers);
@@ -279,7 +279,7 @@ class Hand {
 				}
 				temp.removeAll(best);
 				kickers.clear();
-				if(SIZE >= 5) {
+				if (temp.size() >= 2) {
 					kickers.add(temp.get(0));
 					kickers.add(temp.get(1));
 				}
@@ -370,7 +370,7 @@ class Hand {
 				}
 				temp.removeAll(best);
 				kickers.clear();
-				if(SIZE >= 5) {
+				if (temp.size() >= 1) {
 					kickers.add(temp.get(0));
 				}
 				best.addAll(kickers);
@@ -401,15 +401,13 @@ class Hand {
 				temp.add(nums.get(pt));
 				suits.add(nums.get(pt).suit);
 				pt++;
+				temp.add(nums.get(pt));
+				suits.add(nums.get(pt).suit);
 				while (pt < SIZE - 1) {
 					if (nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
 						rows++;
-						temp.add(nums.get(pt));
-						suits.add(nums.get(pt).suit);
-						if (pt == SIZE - 2) {
-							temp.add(nums.get(pt + 1));
-							suits.add(nums.get(pt + 1).suit);
-						}
+						temp.add(nums.get(pt + 1));
+						suits.add(nums.get(pt + 1).suit);
 						pt++;
 					}
 
@@ -433,6 +431,11 @@ class Hand {
 							best.clear();
 							kickers.clear();
 							best.addAll(temp);
+							if (best.size() > 5) {
+								best.remove(5);
+								if (best.size() > 5)
+									best.remove(5);
+							}
 							temp.clear();
 
 							if (max < 11)
