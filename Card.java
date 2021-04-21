@@ -1,25 +1,25 @@
 package com.holdem;
 
+class Card implements Comparable<Card> {
 
-public class Card implements Comparable<Card>{
-	
-	public int num;
-	public int suit;
+	int num;
+	int suit;
 	boolean isOpened = false;
-	
+
 	Card() {
 		this.num = 0;
 		this.suit = 0;
 	}
-	
+
 	Card(int num, int suit) {
-		if(num == 1)
+		if (num == 1)
 			this.num = 14;
 		else
 			this.num = num;
-		this.suit = suit;};
-		
-	public void show() {
+		this.suit = suit;
+	};
+
+	void show() {
 		if (num >= 2 && num <= 9)
 			System.out.print(num);
 		else if (num == 10)
@@ -41,7 +41,7 @@ public class Card implements Comparable<Card>{
 		else if (suit == 4)
 			System.out.print("︎♣︎");
 	}
-	
+
 	public String toString() {
 		String output = "";
 		if (num >= 2 && num <= 9)

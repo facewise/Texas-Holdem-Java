@@ -3,11 +3,11 @@ package com.holdem;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Hand {
+class Hand {
 
-	public ArrayList<Card> hands = new ArrayList<Card>();
-	ArrayList<Card> best = new ArrayList<Card>();
-	ArrayList<Card> kickers = new ArrayList<Card>();
+	ArrayList<Card> hands = new ArrayList<>();
+	ArrayList<Card> best = new ArrayList<>();
+	ArrayList<Card> kickers = new ArrayList<>();
 	int rank;
 	String text;
 
@@ -17,13 +17,13 @@ public class Hand {
 		rank = -101;
 	}
 
-	public void clear() {
+	void clear() {
 		hands.clear();
 		best.clear();
 		kickers.clear();
 	}
 
-	public void show() {
+	void show() {
 		hands.get(0).show();
 		System.out.print(" ");
 		hands.get(1).show();
@@ -41,7 +41,7 @@ public class Hand {
 	}
 
 	@SuppressWarnings("unchecked")
-	public int getRank() {
+	int getRank() {
 		final int SIZE = hands.size();
 
 		final int HIGH = -100;
@@ -61,7 +61,7 @@ public class Hand {
 		int kind = 1, subKind = 1, suitCount = 0;
 
 		ArrayList<Integer> suits = new ArrayList<>();
-		ArrayList<Card> nums = new ArrayList<Card>();
+		ArrayList<Card> nums = new ArrayList<>();
 
 		nums = (ArrayList<Card>) hands.clone();
 
