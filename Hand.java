@@ -7,10 +7,7 @@ public class Hand {
 
 	public ArrayList<Card> hands = new ArrayList<Card>();
 	ArrayList<Card> best = new ArrayList<Card>();
-	Card kicker1;
-	Card kicker2;
-	Card kicker3;
-	Card kicker4;
+	ArrayList<Card> kickers = new ArrayList<Card>();
 	int rank;
 	String text;
 
@@ -23,17 +20,7 @@ public class Hand {
 	public void clear() {
 		hands.clear();
 		best.clear();
-		kicker1 = new Card();
-		kicker2 = new Card();
-		kicker3 = new Card();
-		kicker4 = new Card();
-	}
-	
-	public void clearKickers() {
-		kicker1 = new Card();
-		kicker2 = new Card();
-		kicker3 = new Card();
-		kicker4 = new Card();
+		kickers.clear();
 	}
 
 	public void show() {
@@ -80,7 +67,7 @@ public class Hand {
 
 		Collections.sort(nums);
 		
-		clearKickers();
+		kickers.clear();
 
 		int pt = 0;
 		/// This block below checks if there's a kind.
@@ -160,11 +147,13 @@ public class Hand {
 					best.remove(5);
 					if (best.size() > 5) {
 						best.remove(5);
-						kicker1 = best.get(1);
-						kicker2 = best.get(2);
-						kicker3 = best.get(3);
-						kicker4 = best.get(4);
+						kickers.clear();
+						kickers.add(best.get(1));
+						kickers.add(best.get(2));
+						kickers.add(best.get(3));
+						kickers.add(best.get(4));
 					}
+					
 				}
 				if (best.get(0).num < 11)
 					text = Integer.toString(best.get(0).num) + " 하이카드";
@@ -193,12 +182,11 @@ public class Hand {
 					}
 				}
 				temp.removeAll(best);
-				kicker1 = temp.get(0);
-				kicker2 = temp.get(1);
-				kicker3 = temp.get(2);
-				best.add(kicker1);
-				best.add(kicker2);
-				best.add(kicker3);
+				kickers.clear();
+				kickers.add(temp.get(0));
+				kickers.add(temp.get(1));
+				kickers.add(temp.get(2));
+				best.addAll(kickers);
 				if (pairNum1 < 11)
 					text = Integer.toString(pairNum1) + " 원페어";
 				else if (pairNum1 == 11)
@@ -226,8 +214,9 @@ public class Hand {
 						}
 					}
 					temp.removeAll(best);
-					kicker1 = temp.get(0);
-					best.add(kicker1);
+					kickers.clear();
+					kickers.add(temp.get(0));
+					best.addAll(kickers);
 					if (pairNum1 < 11)
 						text = Integer.toString(pairNum1) + " 투페어";
 					else if (pairNum1 == 11)
@@ -253,8 +242,9 @@ public class Hand {
 						}
 					}
 					temp.removeAll(best);
-					kicker1 = temp.get(0);
-					best.add(kicker1);
+					kickers.clear();
+					kickers.add(temp.get(0));
+					best.addAll(kickers);
 					if (pairNum2 < 11)
 						text = Integer.toString(pairNum1) + " 투페어";
 					else if (pairNum2 == 11)
@@ -282,10 +272,10 @@ public class Hand {
 					}
 				}
 				temp.removeAll(best);
-				kicker1 = temp.get(0);
-				kicker2 = temp.get(1);
-				best.add(kicker1);
-				best.add(kicker2);
+				kickers.clear();
+				kickers.add(temp.get(0));
+				kickers.add(temp.get(1));
+				best.addAll(kickers);
 				if (pairNum1 < 11)
 					text = Integer.toString(pairNum1) + " 트리플";
 				else if (pairNum1 == 11)
@@ -305,6 +295,7 @@ public class Hand {
 			if (tmp > rank) {
 				rank = tmp;
 				best.clear();
+				kickers.clear();
 				for (int i = 0; i < nums.size(); i++) {
 					if (nums.get(i).num == pairNum1) {
 						best.add(nums.get(i));
@@ -333,6 +324,7 @@ public class Hand {
 			if (tmp > rank) {
 				rank = tmp;
 				best.clear();
+				kickers.clear();
 				for (int i = 0; i < nums.size(); i++) {
 					if (nums.get(i).num == pairNum2) {
 						best.add(nums.get(i));
@@ -369,8 +361,9 @@ public class Hand {
 					}
 				}
 				temp.removeAll(best);
-				kicker1 = temp.get(0);
-				best.add(kicker1);
+				kickers.clear();
+				kickers.add(temp.get(0));
+				best.addAll(kickers);
 				if (pairNum1 < 11)
 					text = Integer.toString(pairNum1) + " 포카드";
 				else if (pairNum1 == 11)
@@ -423,12 +416,16 @@ public class Hand {
 							if (tmp > rank) {
 								rank = tmp;
 								best.clear();
+								kickers.clear();
 								int i = 0;
 								while (i < nums.size()) {
 									if (nums.get(i).num == max) {
 										while (best.size() < 5) {
-											best.add(nums.get(i));
-											i++;
+											if(nums.get(i).num != nums.get(i+1).num) {
+												best.add(nums.get(i));
+											}
+											if(i < 5)
+												i++;
 										}
 									} else {
 										i++;
@@ -530,10 +527,11 @@ public class Hand {
 								for (Card c : temp) {
 									best.add(c);
 								}
-								kicker1 = best.get(1);
-								kicker2 = best.get(2);
-								kicker3 = best.get(3);
-								kicker4 = best.get(4);
+								kickers.clear();
+								kickers.add(best.get(1));
+								kickers.add(best.get(2));
+								kickers.add(best.get(3));
+								kickers.add(best.get(4));
 								rank = tmp;
 								if (fmax1 < 11) {
 									text = Integer.toString(fmax1) + " 플러쉬";

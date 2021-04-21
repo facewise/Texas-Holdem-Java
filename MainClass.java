@@ -48,6 +48,7 @@ public class MainClass {
 
 		ArrayList<Player> kicking = new ArrayList<Player>();
 		ArrayList<Player> temp = (ArrayList<Player>) players.clone();
+		Player winner;
 
 		Collections.sort(temp, Collections.reverseOrder());
 		int maxRank = temp.get(0).hand.rank;
@@ -58,32 +59,37 @@ public class MainClass {
 				kicking.add(p);
 			}
 		}
+
+		System.out.println();
+
 		if (kicking.size() == 1) {
-			kicking.get(0).addPot(tablePot);
-			System.out.println("Winner : " + kicking.get(0).name);
+			winner = kicking.get(0);
+			winner.addPot(tablePot);
+			// System.out.println("Winner : " + winner.name);
+			System.out.println(kicking.toString());
 			restart();
 		}
 
 		else {
-			if (kicking.get(0).hand.kicker1.num == 0) {
+			if (kicking.get(0).hand.kickers.size() == 0) {
 				split();
 				System.out.println("Splitted Pot");
+				System.out.println(kicking.toString());
 			} 
+			
 			else {
+				kicking = getWinners(kicking);
 				if (kicking.size() == 1) {
-					kicking.get(0).addPot(tablePot);
-					System.out.println("Winner : " + kicking.get(0).name);
+					winner = kicking.get(0);
+					winner.addPot(tablePot);
+					// System.out.println("Winner : " + winner.name);
+					System.out.println(kicking.toString());
 				} 
+				
 				else {
-					kicking = getWinners(kicking);
-					if(kicking.size() == 1) {
-						kicking.get(0).addPot(tablePot);
-						System.out.println("Winner : " + kicking.get(0).name);
-					}
-					else {
-						split();
-						System.out.println("Splitted Pot");
-					}
+					split();
+					System.out.println("Splitted Pot");
+					System.out.println(kicking.toString());
 				}
 			}
 		}
@@ -91,45 +97,27 @@ public class MainClass {
 		System.out.println(temp.toString());
 	}
 
+	@SuppressWarnings("unchecked")
 	private static ArrayList<Player> getWinners(ArrayList<Player> player) {
-		ArrayList<Player> winners = new ArrayList<Player>();
-		int max = 0;
-		for (Player p : player) {
-			if (p.hand.kicker1.num >= max) {
-				max = p.hand.kicker1.num;
-				winners.add(p);
-			}
-		}
-		if (winners.size() > 1) {
-			player.removeAll(winners);
-			winners.clear();
-			for (Player p : player) {
-				if (p.hand.kicker2.num >= max) {
-					max = p.hand.kicker2.num;
+		ArrayList<Player> winners = (ArrayList<Player>) player.clone();
+		int max;
+		int size = player.get(0).hand.kickers.size();
+		
+		for(int i = 0; i < size && winners.size() > 1; i++) {
+			max = 0;
+			ArrayList<Player> temp = (ArrayList<Player>) winners.clone();
+			for (Player p : temp) {
+				if(p.hand.kickers.get(i).num > max) {
+					max = p.hand.kickers.get(i).num;
+					winners.clear();
+					winners.add(p);
+				}
+				else if (p.hand.kickers.get(i).num == max) {
 					winners.add(p);
 				}
 			}
 		}
-		if (winners.size() > 1) {
-			player.removeAll(winners);
-			winners.clear();
-			for (Player p : player) {
-				if (p.hand.kicker3.num >= max) {
-					max = p.hand.kicker3.num;
-					winners.add(p);
-				}
-			}
-		}
-		if (winners.size() > 1) {
-			player.removeAll(winners);
-			winners.clear();
-			for (Player p : player) {
-				if (p.hand.kicker4.num >= max) {
-					max = p.hand.kicker4.num;
-					winners.add(p);
-				}
-			}
-		}
+
 		return winners;
 	}
 
