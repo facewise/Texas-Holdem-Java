@@ -66,7 +66,7 @@ public class Hand {
 		nums = (ArrayList<Card>) hands.clone();
 
 		Collections.sort(nums);
-		
+
 		kickers.clear();
 
 		int pt = 0;
@@ -142,7 +142,7 @@ public class Hand {
 			tmp = HIGH + best.get(0).num;
 			if (tmp > rank) {
 				rank = tmp;
-				
+
 				if (best.size() > 5) {
 					best.remove(5);
 					if (best.size() > 5) {
@@ -153,7 +153,7 @@ public class Hand {
 						kickers.add(best.get(3));
 						kickers.add(best.get(4));
 					}
-					
+
 				}
 				if (best.get(0).num < 11)
 					text = Integer.toString(best.get(0).num) + " 하이카드";
@@ -381,124 +381,106 @@ public class Hand {
 		int max = 0;
 
 		/// This block below checks if the numerators are in a row.
-		while (true) {
-			if (pt >= SIZE - 1) {
-				break;
-			}
 
-			else {
-				if (pt < 3 && nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
-					max = nums.get(pt).num;
-					while (true) {
-						if(pt >= SIZE)
-							break;
-						if (nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
-							rows++;
-							suits.add(nums.get(pt).suit);
-							pt++;
-							if (pt >= SIZE - 1) {
-								break;
-							}
-						}
+		ArrayList<Card> temp = new ArrayList<Card>();
 
-						else if (nums.get(pt).num == nums.get(pt + 1).num) {
-							pt += 2;
-							if (pt >= SIZE - 1) {
-								break;
-							}
+		while (pt < SIZE - 1) {
+			if (rows == 1 && nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
+				max = nums.get(pt).num;
+				rows++;
+				temp.add(nums.get(pt));
+				suits.add(nums.get(pt).suit);
+				pt++;
+				while (pt < SIZE - 1) {
+					if (nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
+						rows++;
+						temp.add(nums.get(pt));
+						suits.add(nums.get(pt).suit);
+						if (pt == SIZE - 2) {
+							temp.add(nums.get(pt + 1));
+							suits.add(nums.get(pt + 1).suit);
 						}
-						else
-							break;
+						pt++;
 					}
-					if (rows >= 5) {
-						if (!isSuited(suits)) {
-							int tmp = STRAIGHT + max;
-							if (tmp > rank) {
-								rank = tmp;
-								best.clear();
-								kickers.clear();
-								int i = 0;
-								while (i < nums.size()) {
-									if (nums.get(i).num == max) {
-										while (best.size() < 5) {
-											if(nums.get(i).num != nums.get(i+1).num) {
-												best.add(nums.get(i));
-											}
-											if(i < 5)
-												i++;
-										}
-									} else {
-										i++;
-									}
-								}
-								if (max < 11)
-									text = Integer.toString(max) + " 스트레이트";
-								else if (max == 11)
-									text = "J 스트레이트";
-								else if (max == 12)
-									text = "Q 스트레이트";
-								else if (max == 13)
-									text = "K 스트레이트";
-								else if (max == 14)
-									text = "마운틴";
-							}
-						}
 
-						else if (isSuited(suits)) {
-							int tmp = SF + max;
-							if (tmp > rank) {
-								best.clear();
-								int i = 0;
-								while (i < nums.size()) {
-									if (nums.get(i).num == max) {
-										while (best.size() < 5) {
-											if (nums.get(i).suit == suits.get(0))
-												best.add(nums.get(i));
-											i++;
-										}
-									} else {
-										i++;
-									}
-								}
-								if (max < 11)
-									text = Integer.toString(max) + " 스트레이트 플러쉬";
-								else if (max == 11)
-									text = "J 스트레이트 플러쉬";
-								else if (max == 12)
-									text = "Q 스트레이트 플러쉬";
-								else if (max == 13)
-									text = "K 스트레이트 플러쉬";
-								else if (max == 14) {
-									tmp = RF;
-									text = "로얄 스트레이트 플러쉬";
-								}
-								rank = tmp;
-							}
-						}
+					else if (nums.get(pt).num == nums.get(pt + 1).num) {
+						pt++;
 					}
 
 					else {
-						rows = 0;
+						temp.clear();
 						suits.clear();
+						rows = 1;
+						pt++;
 					}
 				}
 
-				else if (pt > 2) {
-					break;
+				if (rows >= 5) {
+					if (!isSuited(suits)) {
+						int tmp = STRAIGHT + max;
+						if (tmp > rank) {
+							rank = tmp;
+							best.clear();
+							kickers.clear();
+							best.addAll(temp);
+							temp.clear();
+
+							if (max < 11)
+								text = Integer.toString(max) + " 스트레이트";
+							else if (max == 11)
+								text = "J 스트레이트";
+							else if (max == 12)
+								text = "Q 스트레이트";
+							else if (max == 13)
+								text = "K 스트레이트";
+							else if (max == 14)
+								text = "마운틴";
+						}
+					}
+
+					else if (isSuited(suits)) {
+						int tmp = SF + max;
+						if (tmp > rank) {
+							best.clear();
+							best.addAll(temp);
+							temp.clear();
+							if (max < 11)
+								text = Integer.toString(max) + " 스트레이트 플러쉬";
+							else if (max == 11)
+								text = "J 스트레이트 플러쉬";
+							else if (max == 12)
+								text = "Q 스트레이트 플러쉬";
+							else if (max == 13)
+								text = "K 스트레이트 플러쉬";
+							else if (max == 14) {
+								tmp = RF;
+								text = "로얄 스트레이트 플러쉬";
+							}
+							rank = tmp;
+						}
+					}
 				}
 
 				else {
-					pt++;
+					rows = 1;
+					suits.clear();
 				}
 			}
+
+			else {
+				pt++;
+			}
+
 		}
 
 		/////// This below checks if it's flush.
-		if (rank < FLUSH) {
+		if (rank < FLUSH)
+
+		{
 			if (SIZE >= 5) {
 				pt = 0;
 				suits.clear();
-				ArrayList<Card> temp = new ArrayList<Card>();
+				ArrayList<Card> temp1 = new ArrayList<Card>();
 
 				for (Card c : nums) {
 					suits.add(c.suit);
@@ -509,22 +491,22 @@ public class Hand {
 						for (Integer i : suits) {
 							if (i == suitNum) {
 								suitCount++;
-								temp.add(nums.get(pt));
+								temp1.add(nums.get(pt));
 							}
 							pt++;
 						}
 						if (suitCount >= 5) {
-							Collections.sort(temp);
-							int fmax1 = temp.get(0).num;
-							if (temp.size() > 5) {
-								temp.remove(5);
-								if (temp.size() > 5)
-									temp.remove(5);
+							Collections.sort(temp1);
+							int fmax1 = temp1.get(0).num;
+							if (temp1.size() > 5) {
+								temp1.remove(5);
+								if (temp1.size() > 5)
+									temp1.remove(5);
 							}
 							int tmp = FLUSH + fmax1;
 							if (tmp > rank) {
 								best.clear();
-								for (Card c : temp) {
+								for (Card c : temp1) {
 									best.add(c);
 								}
 								kickers.clear();
@@ -546,7 +528,7 @@ public class Hand {
 								}
 							}
 						} else {
-							temp.clear();
+							temp1.clear();
 							suitCount = 0;
 							pt = 0;
 						}
