@@ -183,9 +183,11 @@ class Hand {
 				}
 				temp.removeAll(best);
 				kickers.clear();
-				kickers.add(temp.get(0));
-				kickers.add(temp.get(1));
-				kickers.add(temp.get(2));
+				if(SIZE >= 5) {
+					kickers.add(temp.get(0));
+					kickers.add(temp.get(1));
+					kickers.add(temp.get(2));
+				}
 				best.addAll(kickers);
 				if (pairNum1 < 11)
 					text = Integer.toString(pairNum1) + " 원페어";
@@ -215,7 +217,9 @@ class Hand {
 					}
 					temp.removeAll(best);
 					kickers.clear();
-					kickers.add(temp.get(0));
+					if(SIZE >= 5) {
+						kickers.add(temp.get(0));
+					}
 					best.addAll(kickers);
 					if (pairNum1 < 11)
 						text = Integer.toString(pairNum1) + " 투페어";
@@ -243,7 +247,9 @@ class Hand {
 					}
 					temp.removeAll(best);
 					kickers.clear();
-					kickers.add(temp.get(0));
+					if(SIZE >= 5) {
+						kickers.add(temp.get(0));
+					}
 					best.addAll(kickers);
 					if (pairNum2 < 11)
 						text = Integer.toString(pairNum1) + " 투페어";
@@ -273,8 +279,10 @@ class Hand {
 				}
 				temp.removeAll(best);
 				kickers.clear();
-				kickers.add(temp.get(0));
-				kickers.add(temp.get(1));
+				if(SIZE >= 5) {
+					kickers.add(temp.get(0));
+					kickers.add(temp.get(1));
+				}
 				best.addAll(kickers);
 				if (pairNum1 < 11)
 					text = Integer.toString(pairNum1) + " 트리플";
@@ -362,7 +370,9 @@ class Hand {
 				}
 				temp.removeAll(best);
 				kickers.clear();
-				kickers.add(temp.get(0));
+				if(SIZE >= 5) {
+					kickers.add(temp.get(0));
+				}
 				best.addAll(kickers);
 				if (pairNum1 < 11)
 					text = Integer.toString(pairNum1) + " 포카드";
