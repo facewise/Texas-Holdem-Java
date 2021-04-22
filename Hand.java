@@ -16,6 +16,10 @@ class Hand {
 			this.hands.add(tmp);
 		rank = -101;
 	}
+	
+	Hand() {
+		hands = new ArrayList<Card>();
+	}
 
 	void clear() {
 		hands.clear();
@@ -403,7 +407,7 @@ class Hand {
 				pt++;
 				temp.add(nums.get(pt));
 				suits.add(nums.get(pt).suit);
-				while (pt < SIZE - 1) {
+				while (pt < SIZE - 1 && rows > 1) {
 					if (nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
 						rows++;
 						temp.add(nums.get(pt + 1));

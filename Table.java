@@ -19,7 +19,7 @@ public class Table {
 
 	public int tableNum;
 
-	private int dButton;
+	private int DBU;
 
 	private int BB;
 
@@ -32,7 +32,7 @@ public class Table {
 		players = new ArrayList<>();
 		playersPot = new ArrayList<>();
 		tableNum = this.hashCode();
-		dButton = 0;
+		DBU = 0;
 		BB = 0;
 	}
 
@@ -162,19 +162,7 @@ public class Table {
 		d.shuffle();
 		b.board.clear();
 	}
-
-	private void setBB() {
-		out.print("BB금액을 설정하세요. : ");
-		int tmp = sc.nextInt();
-		if (tmp > 0) {
-			BB = tmp;
-			System.out.println("설정이 완료되었습니다.");
-		} else {
-			System.out.println("Out of Range");
-			setBB();
-		}
-	}
-
+	
 	private int ask() {
 		int tmp;
 		out.print("BET (0 : Fold) :  ");
@@ -193,6 +181,7 @@ public class Table {
 		init();
 		Player user = new Player("USER", 100);
 		players.add(user);
+
 		players.add(new Player("CPU1", 100));
 		players.add(new Player("CPU2", 100));
 		players.add(new Player("CPU3", 100));
@@ -201,11 +190,12 @@ public class Table {
 
 		for (Player p : players) {
 			p.hand = new Hand(d.draws(2));
+			p.show();
 		}
-		user.show();
 		flop();
 		turn();
 		river();
+
 		showdown();
 	}
 
