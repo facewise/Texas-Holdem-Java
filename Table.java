@@ -3,7 +3,6 @@ package com.holdem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 import static java.lang.System.out;
@@ -19,7 +18,9 @@ public class Table {
 	
 	ArrayList<Player> kicking;
 	
-	HashMap<String, Integer> hashMap;
+	HashMap<String, Integer> hashMap1;
+	
+	HashMap<String, Integer> hashMap2;
 	
 	public int tableNum;
 
@@ -33,7 +34,8 @@ public class Table {
 		d = new Deck();
 		b = new Board();
 		tablePot = 0;
-		hashMap = new HashMap<>();
+		hashMap1 = new HashMap<>();
+		hashMap2 = new HashMap<>();
 		players = new ArrayList<>();
 		tableNum = this.hashCode();
 		DBU = 0;
@@ -198,10 +200,16 @@ public class Table {
 		for (Player p : players) {
 			Hand tmp = new Hand(d.draws(2));
 			p.hand = tmp;
+			Collections.sort(tmp.hands);
 			String tempString = tmp.hands.get(0).toString()
 					+ tmp.hands.get(1).toString();
-			if(!hashMap.containsKey(tempString)) {
-				hashMap.put(tempString, 0);
+			if(tmp.hands.get(0).suit==tmp.hands.get(1).suit)
+				tempString = tempString + "s";
+			if(!hashMap1.containsKey(tempString)) {
+				hashMap1.put(tempString, 0);
+			}
+			else {
+				hashMap1.put(tempString, hashMap1.get(tempString)+1);
 			}
 			//p.show();
 		}
@@ -211,9 +219,23 @@ public class Table {
 		river();
 		showdown();
 		for(Player p : kicking) {
-			String tempString = p.hand.hands.get(0).toString()
-					+ p.hand.hands.get(1).toString();
-			hashMap.put(tempString, hashMap.get(tempString)+1);
+			ArrayList<Card> temp = new ArrayList<>();
+			temp.add(p.hand.hands.get(0));
+			temp.add(p.hand.hands.get(1));
+			Collections.sort(temp);
+			
+			String tempString = temp.get(0).toString()
+					+ temp.get(1).toString();
+			
+			if(temp.get(0).suit==temp.get(1).suit)
+				tempString = tempString + "s";
+			
+			if(!hashMap2.containsKey(tempString)) {
+				hashMap2.put(tempString, 0);
+			}
+			else {
+				hashMap2.put(tempString, hashMap2.get(tempString)+1);
+			}
 		}
 	}
 
