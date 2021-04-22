@@ -20,15 +20,15 @@ So this calculates probability only in perfectly natural situation without any v
 
 ## + 100,000 iterations
 
-A2 : 12.3%
-A3 : 12.5%
-A4 : 13.0%
-A5 : 14.2%
-A6 : 14.1%
-A7 : 14.1%
-A8 : 14.3%
-A9 : 15.9%
-AT : 16.1%
+A2 : 12.3%   
+A3 : 12.5%   
+A4 : 13.0%   
+A5 : 14.2%   
+A6 : 14.1%   
+A7 : 14.1%   
+A8 : 14.3%   
+A9 : 15.9%   
+AT : 16.1%   
 AJ : 17.8%
 AQ : 19.6%
 AK : 20.4%
