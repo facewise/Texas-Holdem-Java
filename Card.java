@@ -43,27 +43,19 @@ class Card implements Comparable<Card> {
 	}
 
 	public String toString() {
-		String output = "";
+		String output = null;
 		if (num >= 2 && num <= 9)
-			output.concat(Integer.toString(num));
+			output = Integer.toString(num);
 		else if (num == 10)
-			output.concat("T");
+			output = "T";
 		else if (num == 11)
-			output.concat("J");
+			output = "J";
 		else if (num == 12)
-			output.concat("Q");
+			output = "Q";
 		else if (num == 13)
-			output.concat("K");
+			output = "K";
 		else if (num == 14)
-			output.concat("A");
-		if (suit == 1)
-			output.concat("♠︎");
-		else if (suit == 2)
-			output.concat("♦︎");
-		else if (suit == 3)
-			output.concat("♥︎︎︎");
-		else if (suit == 4)
-			output.concat("︎♣︎");
+			output = "A";
 		return output;
 	}
 

@@ -2,6 +2,8 @@ package com.holdem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import static java.lang.System.out;
@@ -14,9 +16,11 @@ public class Table {
 	private int tablePot;
 
 	private ArrayList<Player> players;
-
-	private ArrayList<Integer> playersPot;
-
+	
+	ArrayList<Player> kicking;
+	
+	HashMap<String, Integer> hashMap;
+	
 	public int tableNum;
 
 	private int DBU;
@@ -29,8 +33,8 @@ public class Table {
 		d = new Deck();
 		b = new Board();
 		tablePot = 0;
+		hashMap = new HashMap<>();
 		players = new ArrayList<>();
-		playersPot = new ArrayList<>();
 		tableNum = this.hashCode();
 		DBU = 0;
 		BB = 0;
@@ -51,24 +55,24 @@ public class Table {
 		b.board.add(d.draw());
 		b.board.add(d.draw());
 		apply();
-		b.show();
+	//	b.show();
 	}
 
 	private void turn() {
 		b.board.add(d.draw());
 		apply();
-		b.show();
+	//	b.show();
 	}
 
 	private void river() {
 		b.board.add(d.draw());
 		apply();
-		b.show();
+	//	b.show();
 	}
 
 	private void showdown() {
 
-		ArrayList<Player> kicking = new ArrayList<Player>();
+		kicking = new ArrayList<Player>();
 		ArrayList<Player> temp = new ArrayList<>();
 		Player winner;
 
@@ -80,47 +84,47 @@ public class Table {
 		int maxRank = temp.get(0).hand.rank;
 
 		for (Player p : players) {
-			p.showBest();
+		//	p.showBest();
 			if (p.hand.rank == maxRank) {
 				kicking.add(p);
 			}
 		}
 
-		System.out.println();
+		//System.out.println();
 
 		if (kicking.size() == 1) {
-			winner = kicking.get(0);
-			winner.addStack(tablePot);
-			System.out.print("Winner : ");
-			System.out.println(kicking.toString());
-			init();
+		//	winner = kicking.get(0);
+		//	winner.addStack(tablePot);
+		//	System.out.print("Winner : ");
+		//	System.out.println(kicking.toString());
+		//	init();
 		}
 
 		else {
 			if (kicking.get(0).hand.kickers.size() == 0) {
-				split(kicking);
-				System.out.println("Splitted Pot");
-				System.out.println(kicking.toString());
+			//	split(kicking);
+			//	System.out.println("Splitted Pot");
+			//	System.out.println(kicking.toString());
 			}
 
 			else {
 				kicking = getWinners(kicking);
 				if (kicking.size() == 1) {
-					winner = kicking.get(0);
-					winner.addStack(tablePot);
-					System.out.print("Winner : ");
-					System.out.println(kicking.toString());
+				//	winner = kicking.get(0);
+				//	winner.addStack(tablePot);
+				//	System.out.print("Winner : ");
+				//	System.out.println(kicking.toString());
 				}
 
 				else {
 					split(kicking);
-					System.out.println("Splitted Pot");
-					System.out.println(kicking.toString());
+				//	System.out.println("Splitted Pot");
+				//	System.out.println(kicking.toString());
 				}
 			}
 		}
-		System.out.println();
-		System.out.println(temp.toString());
+		//System.out.println();
+		//System.out.println(temp.toString());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -187,16 +191,30 @@ public class Table {
 		players.add(new Player("CPU3", 100));
 		players.add(new Player("CPU4", 100));
 		players.add(new Player("CPU5", 100));
+		players.add(new Player("CPU6", 100));
+		players.add(new Player("CPU7", 100));
+		players.add(new Player("CPU8", 100));
 
 		for (Player p : players) {
-			p.hand = new Hand(d.draws(2));
-			p.show();
+			Hand tmp = new Hand(d.draws(2));
+			p.hand = tmp;
+			String tempString = tmp.hands.get(0).toString()
+					+ tmp.hands.get(1).toString();
+			if(!hashMap.containsKey(tempString)) {
+				hashMap.put(tempString, 0);
+			}
+			//p.show();
 		}
+		
 		flop();
 		turn();
 		river();
-
 		showdown();
+		for(Player p : kicking) {
+			String tempString = p.hand.hands.get(0).toString()
+					+ p.hand.hands.get(1).toString();
+			hashMap.put(tempString, hashMap.get(tempString)+1);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
