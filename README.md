@@ -18,7 +18,7 @@ So this calculates probability only in perfectly natural situation without any v
 
 # RESULTS:
 
-## * 100,000 iterations
+## + 100,000 iterations
 
 A2 : 12.3%
 A3 : 12.5%
@@ -215,7 +215,7 @@ T3s : 11.1%
 22 : 13.5%
 
 
-## * 1 million iterations
+## + 1 million iterations
 
 A2 : 12.0%	
 A3 : 12.4%	
