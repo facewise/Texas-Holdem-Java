@@ -24,9 +24,9 @@ public class Table {
 	
 	public int tableNum;
 
-	private int DBU;
+	private int dButton;
 
-	private int BB;
+	private int bigBlind;
 
 	Scanner sc = new Scanner(System.in);
 
@@ -38,8 +38,8 @@ public class Table {
 		hashMap2 = new HashMap<>();
 		players = new ArrayList<>();
 		tableNum = this.hashCode();
-		DBU = 0;
-		BB = 0;
+		dButton = 0;
+		bigBlind = 0;
 	}
 
 	private void apply() {
@@ -105,7 +105,7 @@ public class Table {
 		else {
 			if (kicking.get(0).hand.kickers.size() == 0) {
 			//	split(kicking);
-			//	System.out.println("Splitted Pot");
+			//	System.out.println("Split Pot");
 			//	System.out.println(kicking.toString());
 			}
 
@@ -120,7 +120,7 @@ public class Table {
 
 				else {
 					split(kicking);
-				//	System.out.println("Splitted Pot");
+				//	System.out.println("Split Pot");
 				//	System.out.println(kicking.toString());
 				}
 			}
