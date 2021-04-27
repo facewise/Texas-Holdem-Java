@@ -10,11 +10,11 @@ import static java.lang.System.out;
 public class Table {
 	private Deck d;
 
-	private Board b;
+	private final Board b;
 
 	private int tablePot;
 
-	private ArrayList<Player> players;
+	private final ArrayList<Player> players;
 	
 	ArrayList<Player> kicking;
 	
@@ -43,10 +43,10 @@ public class Table {
 	}
 
 	private void apply() {
-		for (int i = 0; i < players.size(); i++) {
+		for (Player player : players) {
 			for (Card c : b.board) {
-				if (!players.get(i).hand.hands.contains(c)) {
-					players.get(i).hand.hands.add(c);
+				if (!player.hand.hands.contains(c)) {
+					player.hand.hands.add(c);
 				}
 			}
 		}
@@ -74,7 +74,7 @@ public class Table {
 
 	private void showdown() {
 
-		kicking = new ArrayList<Player>();
+		kicking = new ArrayList<>();
 		ArrayList<Player> temp = new ArrayList<>();
 		Player winner;
 
@@ -82,7 +82,7 @@ public class Table {
 			if (p.isActive)
 				temp.add(p);
 		}
-		Collections.sort(temp, Collections.reverseOrder());
+		temp.sort(Collections.reverseOrder());
 		int maxRank = temp.get(0).hand.rank;
 
 		for (Player p : players) {
@@ -259,9 +259,9 @@ public class Table {
 			int tmp = ask();
 			if (tmp > 0) {
 				tablePot = tmp;
-				for (int i = 0; i < players.size(); i++) {
-					if (players.get(i) != user)
-						players.get(i).setPot(tablePot);
+				for (Player player : players) {
+					if (!player.equals(user))
+						player.setPot(tablePot);
 				}
 				ArrayList<Player> temp = (ArrayList<Player>) players.clone();
 				for (Player p : temp) {
@@ -275,9 +275,9 @@ public class Table {
 				tmp = ask();
 				if (tmp > 0) {
 					tablePot = tmp;
-					for (int i = 0; i < players.size(); i++) {
-						if (players.get(i) != user)
-							players.get(i).setPot(tablePot);
+					for (Player player : players) {
+						if (!player.equals(user))
+							player.setPot(tablePot);
 					}
 					temp = (ArrayList<Player>) players.clone();
 					for (Player p : temp) {

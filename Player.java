@@ -17,7 +17,7 @@ public class Player implements Comparable<Player> {
 
 	@Override
 	public String toString() {
-		return this.name + "(" + Integer.toString(hand.rank) + ")";
+		return this.name + "(" + hand.rank + ")";
 	}
 
 	public void show() {

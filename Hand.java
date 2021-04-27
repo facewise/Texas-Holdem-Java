@@ -1,6 +1,7 @@
 package com.holdem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 class Hand {
@@ -12,13 +13,8 @@ class Hand {
 	String text;
 
 	Hand(Card[] cards) {
-		for (Card tmp : cards)
-			this.hands.add(tmp);
+		this.hands.addAll(Arrays.asList(cards));
 		rank = -101;
-	}
-	
-	Hand() {
-		hands = new ArrayList<Card>();
 	}
 
 	void clear() {
@@ -38,7 +34,7 @@ class Hand {
 		int size = a.size();
 		boolean out = true;
 		for (int i = 0; i < size - 1; i++) {
-			out &= a.get(i) == a.get(i + 1);
+			out &= a.get(i).equals(a.get(i + 1));
 		}
 		return out;
 
@@ -65,7 +61,7 @@ class Hand {
 		int kind = 1, subKind = 1, suitCount = 0;
 
 		ArrayList<Integer> suits = new ArrayList<>();
-		ArrayList<Card> nums = new ArrayList<>();
+		ArrayList<Card> nums;
 
 		nums = (ArrayList<Card>) hands.clone();
 
@@ -75,7 +71,7 @@ class Hand {
 
 		int pt = 0;
 		/// This block below checks if there's a kind.
-		while (true) {
+		do {
 			int i = 1;
 			if (kind == 1) {
 				if (pt < SIZE - 1 && nums.get(pt).compareTo(nums.get(pt + 1)) == 0) {
@@ -87,14 +83,10 @@ class Hand {
 							break;
 					}
 					pt += kind;
-				}
-
-				else {
+				} else {
 					pt++;
 				}
-			}
-
-			else if (kind > 1 && subKind == 1) {
+			} else if (kind > 1 && subKind == 1) {
 				if (pt < SIZE - 1 && nums.get(pt).compareTo(nums.get(pt + 1)) == 0) {
 					while (nums.get(pt).compareTo(nums.get(pt + i)) == 0) {
 						subKind++;
@@ -107,9 +99,7 @@ class Hand {
 				} else {
 					pt++;
 				}
-			}
-
-			else if (kind > 1 && subKind > 1) {
+			} else if (kind > 1 && subKind > 1) {
 				int tmpKind = 1;
 				int tmpNum = 0;
 				if (pt < SIZE - 1 && nums.get(pt).compareTo(nums.get(pt + 1)) == 0) {
@@ -120,29 +110,21 @@ class Hand {
 						if (pt + i == SIZE)
 							break;
 					}
-					subKind = tmpKind > subKind ? tmpKind : subKind;
-					pairNum2 = tmpNum > pairNum2 ? tmpNum : pairNum2;
+					subKind = Math.max(tmpKind, subKind);
+					pairNum2 = Math.max(tmpNum, pairNum2);
 					pt += subKind;
-				}
-
-				else {
+				} else {
 					pt++;
 				}
 			}
 
-			if (pt >= SIZE) {
-				break;
-			}
-
-		}
+		} while (pt < SIZE);
 
 		//////// HIGHCARD
-		if (kind == 1 && subKind == 1) {
+		if (kind == 1) {
 			best.clear();
-			int tmp = 0;
-			for (Card c : nums) {
-				best.add(c);
-			}
+			int tmp;
+			best.addAll(nums);
 			tmp = HIGH + best.get(0).num;
 			if (tmp > rank) {
 				rank = tmp;
@@ -160,7 +142,7 @@ class Hand {
 
 				}
 				if (best.get(0).num < 11)
-					text = Integer.toString(best.get(0).num) + " 하이카드";
+					text = best.get(0).num + " 하이카드";
 				else if (best.get(0).num == 11)
 					text = "J 하이카드";
 				else if (best.get(0).num == 12)
@@ -180,9 +162,9 @@ class Hand {
 				ArrayList<Card> temp = (ArrayList<Card>) nums.clone();
 				rank = tmp;
 				best.clear();
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum1) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum1) {
+						best.add(c);
 					}
 				}
 				temp.removeAll(best);
@@ -194,7 +176,7 @@ class Hand {
 				}
 				best.addAll(kickers);
 				if (pairNum1 < 11)
-					text = Integer.toString(pairNum1) + " 원페어";
+					text = pairNum1 + " 원페어";
 				else if (pairNum1 == 11)
 					text = "J 원페어";
 				else if (pairNum1 == 12)
@@ -214,9 +196,9 @@ class Hand {
 					ArrayList<Card> temp = (ArrayList<Card>) nums.clone();
 					rank = tmp;
 					best.clear();
-					for (int i = 0; i < nums.size(); i++) {
-						if (nums.get(i).num == pairNum1 || nums.get(i).num == pairNum2) {
-							best.add(nums.get(i));
+					for (Card c : nums) {
+						if (c.num == pairNum1 || c.num == pairNum2) {
+							best.add(c);
 						}
 					}
 					temp.removeAll(best);
@@ -226,7 +208,7 @@ class Hand {
 					}
 					best.addAll(kickers);
 					if (pairNum1 < 11)
-						text = Integer.toString(pairNum1) + " 투페어";
+						text = pairNum1 + " 투페어";
 					else if (pairNum1 == 11)
 						text = "J 투페어";
 					else if (pairNum1 == 12)
@@ -244,9 +226,9 @@ class Hand {
 					ArrayList<Card> temp = (ArrayList<Card>) nums.clone();
 					rank = tmp;
 					best.clear();
-					for (int i = 0; i < nums.size(); i++) {
-						if (nums.get(i).num == pairNum1 || nums.get(i).num == pairNum2) {
-							best.add(nums.get(i));
+					for (Card c : nums) {
+						if (c.num == pairNum1 || c.num == pairNum2) {
+							best.add(c);
 						}
 					}
 					temp.removeAll(best);
@@ -256,7 +238,7 @@ class Hand {
 					}
 					best.addAll(kickers);
 					if (pairNum2 < 11)
-						text = Integer.toString(pairNum1) + " 투페어";
+						text = pairNum1 + " 투페어";
 					else if (pairNum2 == 11)
 						text = "J 투페어";
 					else if (pairNum2 == 12)
@@ -276,9 +258,9 @@ class Hand {
 				ArrayList<Card> temp = (ArrayList<Card>) nums.clone();
 				rank = tmp;
 				best.clear();
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum1) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum1) {
+						best.add(c);
 					}
 				}
 				temp.removeAll(best);
@@ -289,7 +271,7 @@ class Hand {
 				}
 				best.addAll(kickers);
 				if (pairNum1 < 11)
-					text = Integer.toString(pairNum1) + " 트리플";
+					text = pairNum1 + " 트리플";
 				else if (pairNum1 == 11)
 					text = "J 트리플";
 				else if (pairNum1 == 12)
@@ -308,18 +290,18 @@ class Hand {
 				rank = tmp;
 				best.clear();
 				kickers.clear();
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum1) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum1) {
+						best.add(c);
 					}
 				}
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum2 && best.size() < 5) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum2 && best.size() < 5) {
+						best.add(c);
 					}
 				}
 				if (pairNum1 < 11)
-					text = Integer.toString(pairNum1) + " 풀하우스";
+					text = pairNum1 + " 풀하우스";
 				else if (pairNum1 == 11)
 					text = "J 풀하우스";
 				else if (pairNum1 == 12)
@@ -337,18 +319,18 @@ class Hand {
 				rank = tmp;
 				best.clear();
 				kickers.clear();
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum2) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum2) {
+						best.add(c);
 					}
 				}
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum1 && best.size() < 5) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum1 && best.size() < 5) {
+						best.add(c);
 					}
 				}
 				if (pairNum2 < 11)
-					text = Integer.toString(pairNum2) + " 풀하우스";
+					text = pairNum2 + " 풀하우스";
 				else if (pairNum2 == 11)
 					text = "J 풀하우스";
 				else if (pairNum2 == 12)
@@ -367,9 +349,9 @@ class Hand {
 				ArrayList<Card> temp = (ArrayList<Card>) nums.clone();
 				rank = tmp;
 				best.clear();
-				for (int i = 0; i < nums.size(); i++) {
-					if (nums.get(i).num == pairNum1) {
-						best.add(nums.get(i));
+				for (Card c : nums) {
+					if (c.num == pairNum1) {
+						best.add(c);
 					}
 				}
 				temp.removeAll(best);
@@ -379,7 +361,7 @@ class Hand {
 				}
 				best.addAll(kickers);
 				if (pairNum1 < 11)
-					text = Integer.toString(pairNum1) + " 포카드";
+					text = pairNum1 + " 포카드";
 				else if (pairNum1 == 11)
 					text = "J 포카드";
 				else if (pairNum1 == 12)
@@ -392,11 +374,11 @@ class Hand {
 		}
 
 		pt = 0;
-		int max = 0;
+		int max;
 
 		/// This block below checks if the numerators are in a row.
 
-		ArrayList<Card> temp = new ArrayList<Card>();
+		ArrayList<Card> temp = new ArrayList<>();
 
 		while (pt < SIZE - 1) {
 			if (rows == 1 && nums.get(pt).compareTo(nums.get(pt + 1)) == -1) {
@@ -443,7 +425,7 @@ class Hand {
 							temp.clear();
 
 							if (max < 11)
-								text = Integer.toString(max) + " 스트레이트";
+								text = max + " 스트레이트";
 							else if (max == 11)
 								text = "J 스트레이트";
 							else if (max == 12)
@@ -462,7 +444,7 @@ class Hand {
 							best.addAll(temp);
 							temp.clear();
 							if (max < 11)
-								text = Integer.toString(max) + " 스트레이트 플러쉬";
+								text = max + " 스트레이트 플러쉬";
 							else if (max == 11)
 								text = "J 스트레이트 플러쉬";
 							else if (max == 12)
@@ -497,7 +479,7 @@ class Hand {
 			if (SIZE >= 5) {
 				pt = 0;
 				suits.clear();
-				ArrayList<Card> temp1 = new ArrayList<Card>();
+				ArrayList<Card> temp1 = new ArrayList<>();
 
 				for (Card c : nums) {
 					suits.add(c.suit);
@@ -523,9 +505,7 @@ class Hand {
 							int tmp = FLUSH + fmax1;
 							if (tmp > rank) {
 								best.clear();
-								for (Card c : temp1) {
-									best.add(c);
-								}
+								best.addAll(temp1);
 								kickers.clear();
 								kickers.add(best.get(1));
 								kickers.add(best.get(2));
@@ -533,7 +513,7 @@ class Hand {
 								kickers.add(best.get(4));
 								rank = tmp;
 								if (fmax1 < 11) {
-									text = Integer.toString(fmax1) + " 플러쉬";
+									text = fmax1 + " 플러쉬";
 								} else if (fmax1 == 11) {
 									text = "J 플러쉬";
 								} else if (fmax1 == 12) {

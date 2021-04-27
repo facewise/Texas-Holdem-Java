@@ -6,7 +6,7 @@ class Board {
 	ArrayList<Card> board;
 
 	Board() {
-		board = new ArrayList<Card>();
+		board = new ArrayList<>();
 	}
 
 	void add(Card c) {
@@ -14,7 +14,7 @@ class Board {
 	}
 
 	void show() {
-		System.out.print("Commnunity Cards : ");
+		System.out.print("Community Cards : ");
 		for (Card c : board) {
 			c.show();
 			System.out.print(" ");

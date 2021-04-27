@@ -17,7 +17,7 @@ class Card implements Comparable<Card> {
 		else
 			this.num = num;
 		this.suit = suit;
-	};
+	}
 
 	void show() {
 		if (num >= 2 && num <= 9)
@@ -42,6 +42,7 @@ class Card implements Comparable<Card> {
 			System.out.print("︎♣︎");
 	}
 
+	@Override
 	public String toString() {
 		String output = null;
 		if (num >= 2 && num <= 9)

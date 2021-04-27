@@ -22,12 +22,11 @@ public class Deck {
 		}
 	}
 	
-	
 	public void spread() {
 		for(int i = 0; i < SIZE; i++) {
 			cards[i].show();
 			System.out.print(" ");
-			if(i%13 == 12 && i > 0)
+			if(i%13 == 12)
 				System.out.println();
 		}
 	}
